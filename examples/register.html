@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/commons/commonAjax.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#re_password").blur(function(){
+	   	 if ( $(this).val() != $("#password").val() ){
+	     	   alert("两次输入的密码不一致!");
+	    	    return false;
+	   	 }
+		})
+	});
+	
+		//定义登录的ajax操作
+		function registerBtn(){
+			var file1 = $("#file")[0].files[0];
+			var name1 = $("#name").val();
+			var pass1 = $("#password").val();
+			var formData = new FormData();
+			formData.append("file",file1);
+			formData.append("name",name1); 
+			formData.append("pass",pass1);
+			 $.ajax({  
+		          url: 'user/register2' ,  
+		          type: 'POST',  
+		          data: formData,  
+		          async: false,  
+		          cache: false,  
+		          contentType: false,  
+		          processData: false,  
+		          success: function (result) {  
+		      		if(result.resCode == "0"){
+						alert("注册成功");
+						window.open("index.html");
+					}else{
+						alert("注册失败");
+						location.href = "register.html";
+					}
+		          },  
+		          error: function (result) {  
+		        	  alert("error");
+		          }  
+		     });  
+			
+		}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+<div style="margin:50px auto; width:600px; height:450px; border:2px solid #F00; border-radius:40px">
+<div style="padding:50px 90px">
+<h2 align="center">注册个人博客系统</h2>
+<form method="post" enctype="multipart/form-data" id="uploadForm">
+<input type="text" width="300px" class="form-control" name="name" id="name" placeholder="用户名" required><br>
+<input type="password" class="form-control" name="password" id="password" placeholder="密码" required><br>
+<input type="password" class="form-control" name="re_password" id="re_password" placeholder="确认密码" required><br>
+<input type="file" class="form-control" name="file" id="file" placeholder="上传头像"><br>
+<button onclick="registerBtn()">注册</button>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

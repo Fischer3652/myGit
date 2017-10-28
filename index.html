@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>欢迎登陆</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+ <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/commons/commonAjax.js"></script>
+<script type="text/javascript">
+//定义登录的ajax操作
+ 	 	function loginBtnClick(){
+		var uname = $("#u_name").val();
+		var upass = $("#u_pass").val();
+		var obj = new Object();
+		obj.u_name = uname;
+		obj.u_pass = upass;
+	 	var x = JSON.stringify(obj); 
+	 
+		commonAjax.ajaxGet("user/login",obj,function(result){
+			if(result.resCode == "0"){
+				alert("登录成功");
+				location.href = "main.html";
+			}else{
+				alert("登录失败");
+				location.href = "index.html";
+			}
+		});
+	}  
+	
+	 	/* function loginBtnClick(){
+		var uname = $("#u_name").val();
+		var upass = $("#u_pass").val();
+		var obj = new Object();
+		obj.u_name = uname;
+		obj.u_pass = upass;
+		var x = JSON.stringify(obj); 
+			$.ajax({
+				type:"post",
+				url:"user/login",
+				dataType:"json",
+				contentType: "application/json;charset=UTF-8",
+				data: x,
+				success: function (result) {
+					if(result.resCode == "0"){
+						alert("登录成功");
+						location.href = "main.html";
+					}else{
+						alert("登录失败");
+						location.href = "index.html";
+					}
+				},
+				error: function (data) {
+				     alert("error");	
+				}
+			});  
+		} */ 
+</script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div
+			style="margin: 200px auto; width: 600px; height: 300px; border: 2px solid #F00; border-radius: 40px">
+			<div style="padding: 50px 90px">
+				<h2 align="center">登陆个人博客系统</h2>
+				<div class="form-group">
+					<label class="sr-only" for="u_name">用户名</label> <input type="text"
+						class="form-control" id="u_name" placeholder="请输入用户名">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="u_pass">Password</label> <input
+						type="password" class="form-control" id="u_pass"
+						placeholder="请输入密码">
+				</div>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-default" onclick="loginBtnClick()">登录</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="register.html" >注册</a>
+			</div>
+		</div>
+	</div>
+		
+	
+</body>
+</html>
