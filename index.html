@@ -16,7 +16,7 @@
 		obj.u_name = uname;
 		obj.u_pass = upass;
 	 	var x = JSON.stringify(obj); 
-	 
+		alert(x);
 		commonAjax.ajaxGet("user/login",obj,function(result){
 			if(result.resCode == "0"){
 				alert("登录成功");
