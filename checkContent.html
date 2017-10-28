@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/commons/commonAjax.js"></script>
+<script type="text/javascript">
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	$(function() {
+		var did = GetQueryString("d_id");
+	//	var did = commonAjax.getQueryString("d_id");
+		var obj = new Object();
+		obj.d_id = did;
+		commonAjax.ajaxGet("diary/checkMyDiaryContent", obj, function(data) {
+			$("#d_subject").html(data.resData.d_subject);
+			$("#d_datetime").html(data.resData.d_datetime);
+			$("#d_content").html(data.resData.d_content);
+			commonAjax.ajaxGet("great/totalpoint", obj, function(result) {
+				if(result.resCode=="0"){
+					$("#count").html(result.resData);
+				}else{
+					alert("查点赞数失败");
+				}
+			});
+		});
+	});
+	$(function(){
+		var did = GetQueryString("d_id");
+		var obj = new Object();
+		obj.d_id = did;
+		commonAjax.ajaxGet("great/checkpoint", obj, function(data) {
+			if(data.resCode=="0"){
+				$("#point").text("赞");
+				commonAjax.ajaxGet("great/insertpoint", obj, function(data) {
+				});
+			}else{
+				if(data.resData.is_point=="0"){
+					$("#point").text("赞");
+				}else{
+					$("#point").text("取消赞");
+				}
+			}
+		});		
+	});
+	function checkpoint(){
+		var text=$("#point").text();
+		var did = GetQueryString("d_id");
+		var obj = new Object();
+		obj.d_id = did;
+		if(text=="取消赞"){
+			commonAjax.ajaxGet("great/cancelpoint", obj, function(data) {
+				if(data.resCode=="0"){
+					$("#point").text("赞");
+					commonAjax.ajaxGet("great/totalpoint", obj, function(result) {
+						if(result.resCode=="0"){
+							$("#count").html(result.resData);
+						}else{
+							alert("查点赞数失败");
+						}
+					});
+				}else{
+					$("#point").text("取消赞");
+				}
+			});	
+		}
+		if(text=="赞"){
+			commonAjax.ajaxGet("great/point", obj, function(data) {
+				if(data.resCode=="0"){
+					$("#point").text("取消赞");
+					commonAjax.ajaxGet("great/totalpoint", obj, function(result) {
+						if(result.resCode=="0"){
+							$("#count").html(result.resData);
+						}else{
+							alert("查点赞数失败");
+						}
+					});
+				}else{
+					$("#point").text("赞");
+				}
+			});	
+		}
+	}
+</script>
+</head>
+<body>
+	<div>
+		<div align="center">
+			<h2 id="d_subject"></h2>
+		</div>
+		<div>
+			<span style="color: red" id="d_datetime"></span>
+		</div>
+		<div id="d_content"></div>
+		<div><button id="point" onclick="checkpoint()">赞</button>点赞人数：<span id="count"></span></div>
+		<a href="main.html">返回</a>
+	</div>
+</body>
+</html>
